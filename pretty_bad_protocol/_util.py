@@ -421,12 +421,15 @@ def _find_binary(binary=None):
         elif os.access(binary, os.X_OK):
             found = binary
     if found is None:
-        try: found = _which('gpg', abspath_only=True)[0]
+        try: found = _which('gpg')[0]
         except IndexError as ie:
             log.error("Could not find binary for 'gpg'.")
             try: found = _which('gpg2')[0]
             except IndexError as ie:
                 log.error("Could not find binary for 'gpg2'.")
+                try: found = _which('gpg-agent')[0]
+                except IndexError as ie:
+                log.error("Could not find binary for 'gpg-agent'.")
     if found is None:
         raise RuntimeError("GnuPG is not installed!")
 
